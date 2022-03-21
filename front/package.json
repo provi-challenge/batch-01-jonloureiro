@@ -14,10 +14,14 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "run-p start:*",
+    "start:react": "react-scripts start",
+    "start:css": "npm run generate:css -- --watch",
+    "build": "npm run build:css && react-scripts build",
+    "build:css": "npm run generate:css -- --minify",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "generate:css": "npx tailwindcss -i ./styles/tailwind.css -o ./src/index.css"
   },
   "eslintConfig": {
     "extends": [
