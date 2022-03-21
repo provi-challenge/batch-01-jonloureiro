@@ -1,0 +1,27 @@
+{
+  "name": "back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.js",
+  "type": "module",
+  "scripts": {
+    "start": "NODE_ENV=development nodemon src/app.js"
+  },
+  "engines": {
+    "node": "16.14.0"
+  },
+  "dependencies": {
+    "@sequelize/core": "^7.0.0-alpha.10",
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "express-promise-router": "^4.1.1",
+    "http": "^0.0.1-security",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
+    "throng": "^5.0.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0",
+    "nodemon": "^2.0.15"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "provi-challenge",
+  "version": "1.0.0",
+  "keywords": [
+    "provi",
+    "challenge"
+  ],
+  "author": "Filipe Névola <filipe@provi.com.br>",
+  "devDependencies": {
+    "@quave/eslint-config-quave": "^1.0.7"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@quave/quave"
+    ]
+  }
+}
