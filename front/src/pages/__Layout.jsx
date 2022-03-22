@@ -20,9 +20,7 @@ export function Layout({ children, title, subtitle }) {
         <div className="relative">
           <div className="absolute inset-0 h-1/2 bg-gray-100" />
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-lg overflow-hidden rounded-lg shadow-lg lg:flex lg:max-w-none">
-              {children}
-            </div>
+            {children}
           </div>
         </div>
       </div>
