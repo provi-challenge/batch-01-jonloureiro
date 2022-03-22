@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { IMaskInput } from 'react-imask';
 
 import { isValidCPF } from '../utils';
-import { config } from './config';
+import { config } from '../config';
 import { Layout } from './__Layout';
 
 const { paths } = config;
@@ -13,12 +13,23 @@ const subtitle =
   'Se você não ficar feliz, devolvemos sua entrada em até 7 dias.';
 
 export function Information() {
+  const {
+    state: { course },
+  } = useLocation();
+  const navigate = useNavigate();
+
   const [errors, setErros] = useState({
     name: false,
     email: false,
     cpf: false,
     entry: false,
   });
+
+  useEffect(() => {
+    if (!course) {
+      navigate(paths.home);
+    }
+  }, [course, navigate]);
 
   function handleSubmit(e) {
     e.preventDefault();
