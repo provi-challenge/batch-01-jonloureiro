@@ -4,6 +4,14 @@
 
 @layer components {
   .input {
-    @apply bg-indigo-600;
+    @apply bg-base-200 border-0 shadow-sm hover:shadow;
+  }
+
+  .btn {
+    @apply h-[50px] px-5 text-base shadow;
+  }
+
+  .btn-ghost {
+    @apply bg-gray-50 text-gray-500 shadow-sm hover:bg-gray-100 hover:shadow;
   }
 }
