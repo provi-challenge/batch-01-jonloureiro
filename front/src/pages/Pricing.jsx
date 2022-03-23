@@ -76,12 +76,9 @@ export const Pricing = () => {
           <div className="mt-6">
             <Link
               to={paths.step1}
-              // to={`${paths.step1}${
-              //   data && data.length > 0 ? '?course_id=' + data[0].id : ''
-              // }`}
               state={{ course: data && data.length > 0 ? data[0] : null }}
               className={`btn btn-block${
-                isLoading || isError ? ' btn-disabled' : ''
+                isLoading || isError ? ' btn-disabled loading' : ''
               }`}
             >
               Acesse Agora
