@@ -1,4 +1,4 @@
-import logo from '../logo.svg';
+import { ReactComponent as Logo } from '../logo.svg';
 
 export function Layout({ children, title, subtitle }) {
   return (
@@ -6,7 +6,7 @@ export function Layout({ children, title, subtitle }) {
       <div className="pt-12 sm:pt-16 lg:pt-20">
         <div className="mx-auto flex max-w-7xl flex-col px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center">
-            <img src={logo} alt="logo" />
+            <Logo />
           </div>
           <div className="mt-12 text-center">
             <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl lg:text-5xl">

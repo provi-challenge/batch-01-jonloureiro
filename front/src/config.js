@@ -6,4 +6,6 @@ const paths = Object.freeze({
   step4: '/step1',
 });
 
-export const config = Object.freeze({ paths });
+const apiURI = 'http://localhost:5001';
+
+export const config = Object.freeze({ paths, apiURI });
