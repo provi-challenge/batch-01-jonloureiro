@@ -13,7 +13,7 @@ export const customersRoutes = (() => {
 
     if (error) {
       const { field, type } = error;
-      sendError(res, { status: 'Bad Request', data: { field, type } }, 400);
+      sendError(res, { status: 'Bad Request', field, type }, 400);
       return;
     }
 
