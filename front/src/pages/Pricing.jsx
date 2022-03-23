@@ -1,5 +1,4 @@
 import { CheckCircleIcon } from '@heroicons/react/solid';
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import { config } from '../config';
@@ -21,19 +20,13 @@ const subtitle =
 export const Pricing = () => {
   const { data, isError, isLoading } = useCourses();
 
-  useEffect(() => {
-    console.log(data);
-    console.log(isError);
-    console.log(isLoading);
-  }, [data, isError, isLoading]);
-
   return (
     <Layout title={title} subtitle={subtitle}>
       <div className="mx-auto max-w-lg overflow-hidden rounded-lg shadow-lg lg:flex lg:max-w-none">
         <div className="flex-1 bg-white px-6 py-8 lg:p-12">
-          <h3 className="text-2xl font-extrabold text-gray-900 sm:text-3xl">
+          <h3 className="min-h-[36px] text-2xl font-extrabold text-gray-900 sm:text-3xl">
             {data && data.length > 0 && data[0].name}
-            {isLoading && <>Carregando...</>}
+            {(isLoading || isError) && <>Carregando...</>}
           </h3>
           <p className="mt-6 text-base text-gray-500">
             Lorem ipsum dolor sit amet consect etur adipisicing elit. Itaque
@@ -68,10 +61,10 @@ export const Pricing = () => {
           <p className="text-lg font-medium leading-6 text-gray-900">
             Compre agora, pague depois
           </p>
-          <div className="mt-4 flex items-center justify-center text-5xl font-extrabold text-gray-900">
+          <div className="mt-4 flex h-12 min-h-[48px] items-center justify-center text-5xl font-extrabold text-gray-900">
             <span>
               {data && data.length > 0 && data[0].price / 100}
-              {isLoading && <>...</>}
+              {(isLoading || isError) && <>...</>}
             </span>
             <span className="ml-3 text-xl font-medium text-gray-500">BRL</span>
           </div>
@@ -87,7 +80,9 @@ export const Pricing = () => {
               //   data && data.length > 0 ? '?course_id=' + data[0].id : ''
               // }`}
               state={{ course: data && data.length > 0 ? data[0] : null }}
-              className={`btn btn-block${isLoading ? ' btn-disabled' : ''}`}
+              className={`btn btn-block${
+                isLoading || isError ? ' btn-disabled' : ''
+              }`}
             >
               Acesse Agora
             </Link>
