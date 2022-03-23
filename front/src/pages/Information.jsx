@@ -13,10 +13,10 @@ const subtitle =
   'Se você não ficar feliz, devolvemos sua entrada em até 7 dias.';
 
 export function Information() {
-  const {
-    state: { course },
-  } = useLocation();
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const { course } = location.state ?? {};
 
   const [errors, setErros] = useState({
     name: false,
@@ -29,7 +29,7 @@ export function Information() {
     if (!course) {
       navigate(paths.home);
     }
-  }, [course, navigate]);
+  }, [course, location, navigate]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -122,34 +122,66 @@ export function Information() {
             />
           </label>
 
-          <label className="flex flex-col">
-            <span className="mb-1 text-gray-500">
-              Valor de entrada
-              {errors.entry && (
-                <em className="text-error ml-1 text-xs font-bold not-italic">
-                  (inválido)
-                </em>
-              )}
-            </span>
-            <IMaskInput
-              required
-              name="entry"
-              className="input input-primary"
-              mask={Number}
-              scale={2}
-              signed={false}
-              thousandsSeparator={''}
-              padFractionalZeros={true}
-              normalizeZeros={true}
-              radix={','}
-              mapToRadix={['.']}
-              min={0}
-              max={100000}
-              placeholder="Qual o valor de entrada?"
-            />
-          </label>
+          <div className="flex items-center space-x-4">
+            <label className="flex grow cursor-pointer">
+              <input
+                type="radio"
+                name="entry"
+                className="peer hidden"
+                value="0.1"
+              />
+              <span className="peer-checked:border-neutral w-full rounded-md border-2 py-2 text-center text-base font-bold text-gray-600 peer-checked:text-gray-800">
+                <span className="mr-0.5 text-xs not-italic text-gray-500">
+                  R$
+                </span>
+                {course &&
+                  ((course.price / 100) * 0.1).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+              </span>
+            </label>
 
-          <div className="flex justify-between pt-1 lg:pt-2">
+            <label className="flex grow cursor-pointer">
+              <input
+                type="radio"
+                name="entry"
+                className="peer hidden"
+                value="0.2"
+              />
+              <span className="peer-checked:border-neutral w-full rounded-md border-2 py-2 text-center text-base font-bold text-gray-600 peer-checked:text-gray-800">
+                <span className="mr-0.5 text-xs not-italic text-gray-500">
+                  R$
+                </span>
+                {course &&
+                  ((course.price / 100) * 0.2).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+              </span>
+            </label>
+
+            <label className="flex grow cursor-pointer">
+              <input
+                type="radio"
+                name="entry"
+                className="peer hidden"
+                value="0.3"
+              />
+              <span className="peer-checked:border-neutral w-full rounded-md border-2 py-2 text-center text-base font-bold text-gray-600 peer-checked:text-gray-800">
+                <span className="mr-0.5 text-xs not-italic text-gray-500">
+                  R$
+                </span>
+                {course &&
+                  ((course.price / 100) * 0.3).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+              </span>
+            </label>
+          </div>
+
+          <div className="flex justify-between">
             <Link to={paths.home} className="btn btn-ghost">
               Cancelar
             </Link>
