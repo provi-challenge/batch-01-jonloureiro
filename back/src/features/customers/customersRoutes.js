@@ -17,7 +17,7 @@ export const customersRoutes = (() => {
       return;
     }
 
-    sendData(res, await Customers.post(customer));
+    sendData(res, await Customers.post(customer), { status: 'Created' }, 201);
   });
 
   return router;
