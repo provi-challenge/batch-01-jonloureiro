@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { IMaskInput } from 'react-imask';
 
-import { isValidCPF } from '../utils';
+import { isValidName, isValidEmail, isValidCPF, formatCPF } from '../utils';
 import { config } from '../config';
 import { Layout } from './__Layout';
 
-const { paths } = config;
+const { paths, apiURI } = config;
 
 const title = 'Compre o seu curso profissionalizante';
 const subtitle =
@@ -17,13 +17,26 @@ export function Information() {
   const navigate = useNavigate();
 
   const { course } = location.state ?? {};
-
-  const [errors, setErros] = useState({
+  const initialErrorsState = Object.freeze({
     name: false,
     email: false,
     cpf: false,
     entry: false,
+    api: false,
   });
+
+  const [errors, setErros] = useState(initialErrorsState);
+  const [fetching, setFetching] = useState(true);
+
+  const inputNameRef = useRef(null);
+
+  useEffect(() => {
+    setFetching(false);
+    if (inputNameRef) {
+      inputNameRef.current.disabled = false;
+      inputNameRef.current.focus();
+    }
+  }, []);
 
   useEffect(() => {
     if (!course) {
@@ -31,28 +44,73 @@ export function Information() {
     }
   }, [course, location, navigate]);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
+    setErros(initialErrorsState);
+    setFetching(true);
+
     e.preventDefault();
     if (!e.currentTarget) {
       console.error('Erro no formulário');
       console.error(e);
+      setFetching(false);
       return;
     }
 
     const {
-      elements: { name, email, cpf, entry },
+      elements: {
+        name: { value: name },
+        email: { value: email },
+        cpf: { value: cpf },
+        entry: { value: entry },
+      },
     } = e.currentTarget;
 
     const currentErrors = {};
 
+    if (!isValidName(name)) currentErrors.name = true;
+    if (!isValidEmail(email)) currentErrors.email = true;
     if (!isValidCPF(cpf)) currentErrors.cpf = true;
 
     if (Object.keys(currentErrors).length) {
       setErros((state) => ({ ...state, ...currentErrors }));
+      setFetching(false);
       return;
     }
 
-    // TODO: fazer post
+    const body = JSON.stringify({
+      name,
+      email,
+      cpf: formatCPF(cpf),
+    });
+
+    const fetchResult = await fetch(`${apiURI}/customers`, {
+      method: 'POST',
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      body,
+    });
+
+    if (fetchResult.status !== 201) {
+      const { field } = await fetchResult.json();
+      switch (field) {
+        case 'name':
+          currentErrors.name = true;
+          break;
+        case 'email':
+          currentErrors.email = true;
+          break;
+        case 'cpf':
+          currentErrors.cpf = true;
+          break;
+        default:
+          currentErrors.api = true;
+          break;
+      }
+      setErros((state) => ({ ...state, ...currentErrors }));
+      setFetching(false);
+      return;
+    }
+
+    setFetching(false);
   }
 
   return (
@@ -81,7 +139,8 @@ export function Information() {
               type="text"
               name="name"
               placeholder="Qual o seu nome?"
-              autoFocus
+              disabled={fetching}
+              ref={inputNameRef}
             />
           </label>
 
@@ -100,6 +159,7 @@ export function Information() {
               type="email"
               name="email"
               placeholder="Digite seu email"
+              disabled={fetching}
             />
           </label>
 
@@ -119,6 +179,7 @@ export function Information() {
               type="cpf"
               name="cpf"
               placeholder="Digite seu CPF"
+              disabled={fetching}
             />
           </label>
 
@@ -132,6 +193,7 @@ export function Information() {
                   className="peer hidden"
                   value="0.1"
                   defaultChecked
+                  disabled={fetching}
                 />
                 <span className="peer-checked:border-neutral w-full rounded-md border-2 py-2 text-center text-base font-bold text-gray-600 peer-checked:text-gray-800">
                   <span className="mr-0.5 text-xs not-italic text-gray-500">
@@ -151,6 +213,7 @@ export function Information() {
                   name="entry"
                   className="peer hidden"
                   value="0.2"
+                  disabled={fetching}
                 />
                 <span className="peer-checked:border-neutral w-full rounded-md border-2 py-2 text-center text-base font-bold text-gray-600 peer-checked:text-gray-800">
                   <span className="mr-0.5 text-xs not-italic text-gray-500">
@@ -170,6 +233,7 @@ export function Information() {
                   name="entry"
                   className="peer hidden"
                   value="0.3"
+                  disabled={fetching}
                 />
                 <span className="peer-checked:border-neutral w-full rounded-md border-2 py-2 text-center text-base font-bold text-gray-600 peer-checked:text-gray-800">
                   <span className="mr-0.5 text-xs not-italic text-gray-500">
