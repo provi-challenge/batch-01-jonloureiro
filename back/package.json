@@ -5,7 +5,8 @@
   "main": "src/app.js",
   "type": "module",
   "scripts": {
-    "start": "NODE_ENV=development nodemon src/app.js"
+    "start": "NODE_ENV=development nodemon src/app.js",
+    "migrations": "sequelize db:migrate"
   },
   "engines": {
     "node": "16.14.0"
@@ -18,11 +19,13 @@
     "http": "^0.0.1-security",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
+    "sequelize": "^6.17.0",
     "throng": "^5.0.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {
     "dotenv": "^16.0.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "sequelize-cli": "^6.4.1"
   }
 }
