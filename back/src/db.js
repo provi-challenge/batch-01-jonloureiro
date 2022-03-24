@@ -1,7 +1,8 @@
 import { Sequelize } from '@sequelize/core';
 
 const sequelize = new Sequelize(
-  'postgres://postgres:postgres@localhost:5444/postgres'
+  process.env.DATABASE_URL ??
+    'postgres://postgres:postgres@localhost:5444/postgres'
 );
 
 try {
