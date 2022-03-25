@@ -7,9 +7,11 @@ import { Courses } from './Courses.js';
 export const coursesRoutes = (() => {
   const router = Router();
 
-  router.get('/', async (req, res) => sendData(res, await Courses.get()));
+  router.get('/courses', async (req, res) =>
+    sendData(res, await Courses.get())
+  );
 
-  router.get('/:id', async (req, res) => {
+  router.get('/courses/:id', async (req, res) => {
     const { params } = req;
 
     if (Number.isNaN(+params.id)) {
