@@ -46,7 +46,7 @@ function generateThreeDifferentDigitsByCpf(cpf) {
  * @returns {Array} - array com três ofertas de empréstimo.
  */
 export function generateOffers(customerCpf, coursePrice) {
-  const luckyDigits = generateThreeDifferentDigitsByCpf('29537813070');
+  const luckyDigits = generateThreeDifferentDigitsByCpf(customerCpf);
   const offers = [];
 
   luckyDigits.forEach((luckyDigit, i) => {
