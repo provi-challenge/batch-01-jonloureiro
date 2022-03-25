@@ -45,14 +45,10 @@ export function Information() {
   }, [course, location, navigate]);
 
   async function handleSubmit(e) {
-    setErros(initialErrorsState);
-    setFetching(true);
-
     e.preventDefault();
     if (!e.currentTarget) {
       console.error('Erro no formulário');
       console.error(e);
-      setFetching(false);
       return;
     }
 
@@ -73,7 +69,6 @@ export function Information() {
 
     if (Object.keys(currentErrors).length) {
       setErros((state) => ({ ...state, ...currentErrors }));
-      setFetching(false);
       return;
     }
 
@@ -83,14 +78,14 @@ export function Information() {
       cpf: formatCPF(cpf),
     });
 
-    const fetchResult = await fetch(`${apiURI}/customers`, {
+    const responsePostCustomers = await fetch(`${apiURI}/customers`, {
       method: 'POST',
       headers: new Headers({ 'Content-Type': 'application/json' }),
       body,
     });
 
-    if (fetchResult.status !== 201) {
-      const { field } = await fetchResult.json();
+    if (!responsePostCustomers.ok) {
+      const { field } = await responsePostCustomers.json();
       switch (field) {
         case 'name':
           currentErrors.name = true;
@@ -106,11 +101,26 @@ export function Information() {
           break;
       }
       setErros((state) => ({ ...state, ...currentErrors }));
-      setFetching(false);
       return;
     }
 
-    setFetching(false);
+    const { data } = await responsePostCustomers.json();
+    const { id: customerId } = data;
+    const { id: courseId } = course;
+
+    const responseGetLoans = await fetch(
+      `${apiURI}/customers/${customerId}/courses/${courseId}/loans?entry=${entry}`
+    );
+
+    if (!responseGetLoans.ok) {
+      currentErrors.api = true;
+      setErros((state) => ({ ...state, ...currentErrors }));
+      return;
+    }
+
+    const responseGetLoansBody = await responseGetLoans.json();
+    // Enviar dados para próxima rota
+    console.log(responseGetLoansBody);
   }
 
   return (
@@ -118,7 +128,12 @@ export function Information() {
       <div className="mx-auto overflow-hidden rounded-lg shadow-lg lg:flex lg:max-w-fit">
         <form
           className="space-y-4 bg-white px-6 py-8 lg:space-y-6 lg:p-12"
-          onSubmit={handleSubmit}
+          onSubmit={async (e) => {
+            setFetching(true);
+            setErros(initialErrorsState);
+            await handleSubmit(e);
+            setFetching(false);
+          }}
         >
           <h3 className="text-2xl font-extrabold text-gray-900 sm:text-3xl">
             Informações básicas
@@ -186,7 +201,12 @@ export function Information() {
           <div>
             <p className="mb-1 text-gray-500">Valor de entrada</p>
             <div className="flex items-center space-x-4">
-              <label className="flex grow cursor-pointer">
+              <label
+                className={
+                  'flex grow ' +
+                  (!fetching ? 'cursor-pointer' : 'cursor-not-allowed')
+                }
+              >
                 <input
                   type="radio"
                   name="entry"
@@ -207,7 +227,12 @@ export function Information() {
                 </span>
               </label>
 
-              <label className="flex grow cursor-pointer">
+              <label
+                className={
+                  'flex grow ' +
+                  (!fetching ? 'cursor-pointer' : 'cursor-not-allowed')
+                }
+              >
                 <input
                   type="radio"
                   name="entry"
@@ -227,7 +252,12 @@ export function Information() {
                 </span>
               </label>
 
-              <label className="flex grow cursor-pointer">
+              <label
+                className={
+                  'flex grow ' +
+                  (!fetching ? 'cursor-pointer' : 'cursor-not-allowed')
+                }
+              >
                 <input
                   type="radio"
                   name="entry"
