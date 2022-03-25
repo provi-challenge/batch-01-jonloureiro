@@ -1,6 +1,6 @@
 const NUMBER_OF_INSTALLMENTS = [6, 12, 24];
 
-// Array com 10 valores utilizados para como taxas personalizadas
+// Array com 10 valores utilizados como taxas personalizadas
 const CUSTOM_LOAN_RATES = Array.from({ length: 10 })
   .map((_, i) => (i + 1) * 3)
   .map(aNumber => +(aNumber * 0.01).toFixed(2));
