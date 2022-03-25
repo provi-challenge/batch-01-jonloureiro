@@ -38,21 +38,23 @@ function generateThreeDifferentDigitsByCpf(cpf) {
  * Um algoritmo determinístico para gerar ofertas de empréstimo baseado em um
  * CPF e um valor do curso.
  * Devolve um array com três possíveis parcelas de um empréstimo com os campos
- * installment`, `installmentValue`, `totalValue`, `discount`,
- * `installmentDiscount`, `totalDiscount` e `finalValue`.
+ * `coursePrice`, `entry`, `installment`, `installmentValue`, `totalValue`,
+ * `discount`, `installmentDiscount`, `totalDiscount` e `finalValue`.
  *
  * @param {string} customerCpf - cpf da pessoa
  * @param {string} coursePrice - preço do curso
+ * @param {number} entry - entrada do empréstimo em percentagem (0-1)
  * @returns {Array} - array com três ofertas de empréstimo.
  */
-export function generateOffers(customerCpf, coursePrice) {
+export function generateOffers(customerCpf, coursePrice, entry = 0) {
   const luckyDigits = generateThreeDifferentDigitsByCpf(customerCpf);
   const offers = [];
 
   luckyDigits.forEach((luckyDigit, i) => {
     const installment = NUMBER_OF_INSTALLMENTS[i];
     const installmentValue = Math.round(
-      (coursePrice / installment) * (1 + CUSTOM_LOAN_RATES[luckyDigit])
+      ((coursePrice * (1 - entry)) / installment) *
+        (1 + CUSTOM_LOAN_RATES[luckyDigit])
     );
     const discount = +(CUSTOM_LOAN_RATES[luckyDigit] / 3).toFixed(2);
     const totalValue = installment * installmentValue;
@@ -61,6 +63,8 @@ export function generateOffers(customerCpf, coursePrice) {
     const finalValue = totalValue - totalDiscount;
 
     const offer = {
+      coursePrice,
+      entry,
       installment,
       installmentValue,
       totalValue,

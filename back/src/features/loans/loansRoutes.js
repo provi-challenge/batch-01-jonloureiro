@@ -13,10 +13,11 @@ export const loansRoutes = (() => {
   const router = Router();
 
   router.get(
-    `/customers/:${CUSTOMER_ID}/courses/:${COURSES_ID}/loan`,
+    `/customers/:${CUSTOMER_ID}/courses/:${COURSES_ID}/loans`,
     async (req, res) => {
       const customerId = req.params[CUSTOMER_ID];
       const coursesId = req.params[COURSES_ID];
+      const { entry } = req.query;
 
       if (
         !customerId ||
@@ -39,7 +40,10 @@ export const loansRoutes = (() => {
         return;
       }
 
-      sendData(res, generateOffers(customer.cpf, course.price));
+      const { cpf: customerCpf } = customer;
+      const { price: coursePrice } = course;
+
+      sendData(res, generateOffers(customerCpf, coursePrice, entry));
     }
   );
 
