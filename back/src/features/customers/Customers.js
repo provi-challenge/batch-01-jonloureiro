@@ -12,4 +12,18 @@ export const Customers = {
     );
     return data;
   },
+  async get(id) {
+    if (id) {
+      const [[data]] = await db.query(
+        'SELECT * FROM customers WHERE id = :id',
+        {
+          replacements: { id },
+        }
+      );
+      return data;
+    }
+
+    const [data] = await db.query('SELECT * FROM customers');
+    return data;
+  },
 };
