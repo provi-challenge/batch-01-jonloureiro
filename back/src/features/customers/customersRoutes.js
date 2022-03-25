@@ -8,7 +8,7 @@ import { Customers } from './Customers.js';
 export const customersRoutes = (() => {
   const router = Router();
 
-  router.post('/', async (req, res) => {
+  router.post('/customers', async (req, res) => {
     const { error, ...customer } = await createCustomer(req.body);
 
     if (error) {
