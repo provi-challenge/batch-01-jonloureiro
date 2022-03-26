@@ -1,53 +1,34 @@
-const NUMBER_OF_INSTALLMENTS = [6, 12, 24];
+import { generateDigitsByCpf } from './generateDigitsByCpf.js';
+
+const NUMBER_OF_INSTALLMENTS = Object.freeze([6, 12, 24]);
 
 // Array com 10 valores utilizados como taxas personalizadas
-const CUSTOM_LOAN_RATES = Array.from({ length: 10 })
-  .map((_, i) => (i + 1) * 3)
-  .map(aNumber => +(aNumber * 0.01).toFixed(2));
+const CUSTOM_LOAN_RATES = Object.freeze(
+  Array.from({ length: 10 })
+    .map((_, i) => (i + 1) * 3)
+    .map(aNumber => +(aNumber * 0.01).toFixed(2))
+);
 
-/*
- * Função que gera um array com três dígitos (0-9) baseado no cpf da pessoa.
- * Esses dígitos serão utilizados para gerar taxas personalizadas. Com ênfase em
- * personalizadas.
- *
- * @param {string} cpf - cpf da pessoa
- * @returns {array} - array com três dígitos
- */
-function generateThreeDifferentDigitsByCpf(cpf) {
-  const allPossibleDigits = cpf.split('').map(Number);
-  const threeDifferentDigits = [];
-
-  for (
-    let i = 0;
-    threeDifferentDigits.length < NUMBER_OF_INSTALLMENTS.length &&
-    i < allPossibleDigits.length;
-    i++
+export const generateOffers = function(customerCpf, coursePrice, entry = 0) {
+  if (
+    typeof customerCpf !== 'string' ||
+    customerCpf === '' ||
+    Number.isNaN(+customerCpf)
   ) {
-    const currentDigit =
-      allPossibleDigits[((i + 1) * 3) % allPossibleDigits.length];
-    if (threeDifferentDigits.indexOf(currentDigit) === -1) {
-      threeDifferentDigits.push(currentDigit);
-    }
+    throw new Error('O cpf deve ser uma string de números');
   }
 
-  threeDifferentDigits.sort((a, b) => a - b);
-  return threeDifferentDigits;
-}
+  if (
+    !coursePrice ||
+    (typeof numberOffers !== 'number' && Number.isNaN(+coursePrice)) ||
+    (typeof numberOffers !== 'number' && !Number.isInteger(+coursePrice))
+  ) {
+    throw new Error('Precisa do valor do curso para gerar ofertas');
+  }
 
-/*
- * Um algoritmo determinístico para gerar ofertas de empréstimo baseado em um
- * CPF e um valor do curso.
- * Devolve um array com três possíveis parcelas de um empréstimo com os campos
- * `coursePrice`, `entry`, `installment`, `installmentValue`, `totalValue`,
- * `discount`, `installmentDiscount`, `totalDiscount` e `finalValue`.
- *
- * @param {string} customerCpf - cpf da pessoa
- * @param {string} coursePrice - preço do curso
- * @param {number} entry - entrada do empréstimo em percentagem (0-1)
- * @returns {Array} - array com três ofertas de empréstimo.
- */
-export function generateOffers(customerCpf, coursePrice, entry = 0) {
-  const luckyDigits = generateThreeDifferentDigitsByCpf(customerCpf);
+  const self = generateOffers;
+
+  const luckyDigits = self._getLuckyDigits(customerCpf);
   const offers = [];
 
   luckyDigits.forEach((luckyDigit, i) => {
@@ -79,4 +60,8 @@ export function generateOffers(customerCpf, coursePrice, entry = 0) {
 
   offers.sort((a, b) => a.installment - b.installment);
   return offers;
-}
+};
+
+generateOffers._getLuckyDigits = function(customerCpf) {
+  return generateDigitsByCpf(customerCpf, NUMBER_OF_INSTALLMENTS.length);
+};
