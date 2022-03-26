@@ -8,6 +8,7 @@ import { generateOffers } from './helpers/generateOffer.js';
 
 const CUSTOMER_ID = 'customerId';
 const COURSES_ID = 'coursesId';
+const POSSIBLE_ENTRY_VALUES = [0.1, 0.2, 0.3];
 
 export const loansRoutes = (() => {
   const router = Router();
@@ -23,7 +24,9 @@ export const loansRoutes = (() => {
         !customerId ||
         !Number.isInteger(+customerId) ||
         !coursesId ||
-        !Number.isInteger(+coursesId)
+        !Number.isInteger(+coursesId) ||
+        !entry ||
+        !POSSIBLE_ENTRY_VALUES.includes(+entry)
       ) {
         sendError(res, { status: 'Bad Request' }, 400);
         return;
@@ -43,7 +46,7 @@ export const loansRoutes = (() => {
       const { cpf: customerCpf } = customer;
       const { price: coursePrice } = course;
 
-      sendData(res, generateOffers(customerCpf, coursePrice, entry));
+      sendData(res, generateOffers(customerCpf, coursePrice, +entry));
     }
   );
 
