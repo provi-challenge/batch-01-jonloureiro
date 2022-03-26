@@ -7,7 +7,8 @@
   "scripts": {
     "prestart": "sequelize db:migrate",
     "start": "NODE_ENV=production node src/app.js",
-    "dev": "NODE_ENV=development nodemon"
+    "dev": "NODE_ENV=development nodemon",
+    "test": "NODE_ENV=test ava"
   },
   "engines": {
     "node": "16.14.0"
@@ -25,8 +26,10 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "ava": "^4.1.0",
     "dotenv": "^16.0.0",
     "nodemon": "^2.0.15",
-    "sequelize-cli": "^6.4.1"
+    "sequelize-cli": "^6.4.1",
+    "sinon": "^13.0.1"
   }
 }
