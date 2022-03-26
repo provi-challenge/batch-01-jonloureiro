@@ -42,7 +42,7 @@ export function Information() {
     if (!course) {
       navigate(paths.home);
     }
-  }, [course, location, navigate]);
+  }, []); // eslint-disable-line
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -119,8 +119,12 @@ export function Information() {
     }
 
     const responseGetLoansBody = await responseGetLoans.json();
-    // Enviar dados para próxima rota
-    console.log(responseGetLoansBody);
+    navigate(paths.step2, {
+      state: {
+        loans: [...responseGetLoansBody.data],
+        course,
+      },
+    });
   }
 
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import { Information, Pricing } from './pages';
+import { Financing, Information, Pricing } from './pages';
 import { config } from './config';
 
 const { paths } = config;
@@ -12,6 +12,7 @@ function App() {
       <Routes>
         <Route path={paths.home} element={<Pricing />}></Route>
         <Route path={paths.step1} element={<Information />}></Route>
+        <Route path={paths.step2} element={<Financing />}></Route>
       </Routes>
     </BrowserRouter>
   );
