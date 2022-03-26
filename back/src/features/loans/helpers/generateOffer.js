@@ -9,7 +9,7 @@ const CUSTOM_LOAN_RATES = Object.freeze(
     .map(aNumber => +(aNumber * 0.01).toFixed(2))
 );
 
-export const generateOffers = function(customerCpf, coursePrice, entry = 0) {
+export const generateOffers = function(customerCpf, coursePrice, entry = 0.1) {
   if (
     typeof customerCpf !== 'string' ||
     customerCpf === '' ||
@@ -24,6 +24,14 @@ export const generateOffers = function(customerCpf, coursePrice, entry = 0) {
     (typeof numberOffers !== 'number' && !Number.isInteger(+coursePrice))
   ) {
     throw new Error('Precisa do valor do curso para gerar ofertas');
+  }
+
+  if (
+    !entry ||
+    typeof entry !== 'number' ||
+    !(entry === 0.1 || entry === 0.2 || entry === 0.3)
+  ) {
+    throw new Error('O valor de entrada deve ser 0.1, 0.2 ou 0.3');
   }
 
   const self = generateOffers;
@@ -44,8 +52,8 @@ export const generateOffers = function(customerCpf, coursePrice, entry = 0) {
     const finalValue = totalValue - totalDiscount;
 
     const offer = {
-      coursePrice,
-      entry,
+      coursePrice: +coursePrice,
+      entry: +entry,
       installment,
       installmentValue,
       totalValue,
