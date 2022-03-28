@@ -48,9 +48,12 @@ export const loansRoutes = (() => {
       const { price: coursePrice } = course;
 
       const offers = generateOffers(customerCpf, coursePrice, +entry);
-      const signature = toSign(JSON.stringify(offers));
+      const offersBuffer = Buffer.from(JSON.stringify(offers)).toString(
+        'base64'
+      );
+      const signature = toSign(offersBuffer);
 
-      sendData(res, offers, { signature });
+      sendData(res, offers, { signature: `${offersBuffer}.${signature}` });
     }
   );
 
