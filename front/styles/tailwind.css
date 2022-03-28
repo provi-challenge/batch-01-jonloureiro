@@ -11,7 +11,15 @@
     @apply btn-primary h-[50px] border-0 bg-gray-800 px-5 text-base text-white shadow will-change-transform hover:bg-gray-900;
   }
 
+  .btn-36 {
+    @apply h-[36px];
+  }
+
   .btn-ghost {
     @apply bg-gray-50 text-gray-500 shadow-sm hover:bg-gray-100 hover:shadow;
+  }
+
+  .clickable {
+    @apply cursor-pointer transition-all delay-75 duration-300 will-change-transform active:hover:scale-[.99] active:focus:scale-[.99];
   }
 }
