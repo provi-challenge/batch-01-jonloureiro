@@ -178,7 +178,7 @@ test('Permitir valores 0.1, 0.2 e 0.3 para o campo entry', t => {
         {
           message,
         },
-        `entry deve ser ${entry} e é ${i}`
+        `entry deve ser ${entry}`
       );
     }
   }
