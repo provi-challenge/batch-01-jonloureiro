@@ -5,7 +5,7 @@ import { config } from '../config';
 import { Layout } from './__Layout';
 import { useCourses } from '../hooks';
 
-const { paths } = config;
+const { paths, textsDefault: texts } = config;
 
 const includedFeatures = [
   'Lorem ipsum dolor',
@@ -13,15 +13,12 @@ const includedFeatures = [
   'Blanditiis repellendus etur ',
   'Quidem assumenda',
 ];
-const title = 'Compre o seu curso profissionalizante';
-const subtitle =
-  'Se você não ficar feliz, devolvemos sua entrada em até 7 dias.';
 
 export const Pricing = () => {
   const { data, isError, isLoading } = useCourses();
 
   return (
-    <Layout title={title} subtitle={subtitle}>
+    <Layout title={texts.title} subtitle={texts.subtitle}>
       <div className="mx-auto max-w-lg overflow-hidden rounded-lg shadow-lg lg:flex lg:max-w-none">
         <div className="flex-1 bg-white px-6 py-8 lg:p-12">
           <h3 className="min-h-[36px] text-2xl font-extrabold text-gray-900 sm:text-3xl">

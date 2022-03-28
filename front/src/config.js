@@ -8,4 +8,9 @@ const paths = Object.freeze({
 
 const apiURI = 'http://localhost:5001';
 
-export const config = Object.freeze({ paths, apiURI });
+const textsDefault = Object.freeze({
+  title: 'Compre o seu curso profissionalizante',
+  subtitle: 'Se você não ficar feliz, devolvemos sua entrada em até 7 dias.',
+});
+
+export const config = Object.freeze({ paths, apiURI, textsDefault });
