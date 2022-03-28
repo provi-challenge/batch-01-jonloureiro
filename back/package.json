@@ -7,6 +7,7 @@
   "scripts": {
     "prestart": "sequelize db:migrate",
     "start": "NODE_ENV=production node src/app.js",
+    "predev": "npm run prestart",
     "dev": "NODE_ENV=development nodemon",
     "test": "NODE_ENV=test ava"
   },
