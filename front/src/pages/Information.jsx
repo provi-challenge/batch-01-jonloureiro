@@ -2,7 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { IMaskInput } from 'react-imask';
 
-import { isValidName, isValidEmail, isValidCPF, formatCPF } from '../utils';
+import {
+  isValidName,
+  isValidEmail,
+  isValidCPF,
+  formatCPF,
+  formatMoney,
+} from '../utils';
 import { config } from '../config';
 import { Layout } from './__Layout';
 
@@ -223,11 +229,7 @@ export function Information() {
                   <span className="mr-0.5 text-xs not-italic text-gray-500">
                     R$
                   </span>
-                  {course &&
-                    ((course.price / 100) * 0.1).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
+                  {course && formatMoney((course.price / 100) * 0.1)}
                 </span>
               </label>
 
@@ -248,11 +250,7 @@ export function Information() {
                   <span className="mr-0.5 text-xs not-italic text-gray-500">
                     R$
                   </span>
-                  {course &&
-                    ((course.price / 100) * 0.2).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
+                  {course && formatMoney((course.price / 100) * 0.2)}
                 </span>
               </label>
 
@@ -273,11 +271,7 @@ export function Information() {
                   <span className="mr-0.5 text-xs not-italic text-gray-500">
                     R$
                   </span>
-                  {course &&
-                    ((course.price / 100) * 0.3).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
+                  {course && formatMoney((course.price / 100) * 0.3)}
                 </span>
               </label>
             </div>
