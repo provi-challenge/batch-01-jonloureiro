@@ -9,9 +9,9 @@ export function Layout({ children, title, subtitle }) {
             <Logo />
           </div>
           <div className="mt-12 text-center">
-            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl lg:text-5xl">
+            <h1 className="text-3xl font-extrabold text-gray-900 sm:text-4xl lg:text-5xl">
               {title}
-            </h2>
+            </h1>
             <p className="mt-4 text-xl text-gray-600">{subtitle}</p>
           </div>
         </div>
