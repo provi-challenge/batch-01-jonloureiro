@@ -5,33 +5,28 @@ import { formatMoney } from '../utils';
 import { config } from '../config';
 import { Layout } from './__Layout';
 
-const { paths } = config;
-
-const title = 'Compre o seu curso profissionalizante';
-const subtitle =
-  'Se você não ficar feliz, devolvemos sua entrada em até 7 dias.';
+const { paths, apiURI, textsDefault } = config;
 
 export function Financing() {
   const [componentIsReady, setComponentIsReady] = useState(false);
-  const [texts, setTexts] = useState({
-    title,
-    subtitle,
-  });
+  const [texts, setTexts] = useState(textsDefault);
+  const [paymentMethods, setPaymentMethods] = useState([]);
 
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { course, loans } = location.state ?? {};
+  const { course, loans, signature } = location.state ?? {};
 
   useEffect(() => {
-    if ((!loans || !!loans.length) && !course) {
+    getPaymentMethods();
+  }, []);
+
+  useEffect(() => {
+    if (!loans || !loans.length || !signature || !course) {
       navigate(paths.home);
       return;
     }
-    if (!loans) {
-      navigate(paths.step1);
-      return;
-    }
+
     setTexts((state) => ({
       ...state,
       title: `${course.name}`,
@@ -40,9 +35,37 @@ export function Financing() {
       )}`,
     }));
     setComponentIsReady(true);
-    console.log(loans);
-    console.log(course);
   }, []); // eslint-disable-line
+
+  async function getPaymentMethods() {
+    const responseGetPaymentMethods = await fetch(`${apiURI}/payment-methods`);
+    if (!responseGetPaymentMethods.ok) {
+      console.error('Erro ao buscar métodos de pagamento');
+      return;
+    }
+    const { data } = await responseGetPaymentMethods.json();
+    setPaymentMethods(data);
+  }
+
+  async function handleClick(e, loan, attempts = 0) {
+    e.preventDefault();
+
+    if (!paymentMethods.length) {
+      if (attempts > 3) return;
+      await getPaymentMethods();
+      handleClick(e, loan, attempts++);
+      return;
+    }
+
+    navigate(paths.step3, {
+      state: {
+        course,
+        signature: signature,
+        paymentMethods,
+        selectedLoanNumber: loan.number,
+      },
+    });
+  }
 
   if (!componentIsReady) return <h1>Aguarde</h1>;
 
@@ -71,11 +94,11 @@ export function Financing() {
                 /mês
               </b>
             </div>
-            <div className="text-gray-700">
+            <div className="text-base text-gray-700">
               <p className="text-sm font-medium text-gray-700/70">por apenas</p>
               <b className="font-medium">
                 R${' '}
-                <span className="text-dark-blue text-2xl font-bold">
+                <span className="text-dark-blue text-3xl font-bold">
                   {formatMoney(
                     (loan.installmentValue - loan.installmentDiscount) / 100
                   )}
@@ -85,7 +108,10 @@ export function Financing() {
             </div>
 
             <div>
-              <button className="btn btn-36 btn-block group-hover:bg-primary transition-all">
+              <button
+                onClick={(e) => handleClick(e, loan)}
+                className="btn btn-36 btn-block group-hover:bg-primary transition-all"
+              >
                 Escolher
               </button>
               <p className="mt-2 text-xs font-medium text-gray-400">
