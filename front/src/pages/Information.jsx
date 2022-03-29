@@ -275,7 +275,7 @@ export function Information() {
             </div>
           </div>
 
-          <div className="flex justify-between">
+          <div className="flex justify-between space-x-4 sm:w-[18.75rem] sm:space-x-0">
             <Link to={paths.home} className="btn btn-ghost">
               Cancelar
             </Link>
