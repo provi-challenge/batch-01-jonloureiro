@@ -22,4 +22,8 @@
   .clickable {
     @apply cursor-pointer transition-all delay-75 duration-300 will-change-transform active:hover:scale-[.99] active:focus:scale-[.99];
   }
+
+  .input {
+    @apply border-0 bg-gray-100 font-medium shadow hover:shadow-md;
+  }
 }

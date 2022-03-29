@@ -5,6 +5,7 @@ import { sendData } from '../../utils/sendData.js';
 import { Courses } from '../courses/Courses.js';
 import { Customers } from '../customers/Customers.js';
 import { generateOffers } from './helpers/generateOffer.js';
+import { toSign } from '../../utils/signAndVerify.js';
 
 const CUSTOMER_ID = 'customerId';
 const COURSES_ID = 'coursesId';
@@ -46,7 +47,13 @@ export const loansRoutes = (() => {
       const { cpf: customerCpf } = customer;
       const { price: coursePrice } = course;
 
-      sendData(res, generateOffers(customerCpf, coursePrice, +entry));
+      const offers = generateOffers(customerCpf, coursePrice, +entry);
+      const offersBuffer = Buffer.from(JSON.stringify(offers)).toString(
+        'base64'
+      );
+      const signature = toSign(offersBuffer);
+
+      sendData(res, offers, { signature: `${offersBuffer}.${signature}` });
     }
   );
 

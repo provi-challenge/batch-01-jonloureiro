@@ -36,6 +36,7 @@ function validSut(t, sut, numberOffers = 3) {
   t.is(actual, numberOffers, `O tamanho tem que ser ${numberOffers}`);
 
   const keys = [
+    'number',
     'coursePrice',
     'entry',
     'installment',

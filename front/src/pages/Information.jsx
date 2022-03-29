@@ -12,11 +12,7 @@ import {
 import { config } from '../config';
 import { Layout } from './__Layout';
 
-const { paths, apiURI } = config;
-
-const title = 'Compre o seu curso profissionalizante';
-const subtitle =
-  'Se você não ficar feliz, devolvemos sua entrada em até 7 dias.';
+const { paths, apiURI, textsDefault: texts } = config;
 
 export function Information() {
   const location = useLocation();
@@ -124,17 +120,19 @@ export function Information() {
       return;
     }
 
-    const responseGetLoansBody = await responseGetLoans.json();
+    const { signature, data: loans } = await responseGetLoans.json();
+
     navigate(paths.step2, {
       state: {
-        loans: [...responseGetLoansBody.data],
+        signature: signature,
+        loans,
         course,
       },
     });
   }
 
   return (
-    <Layout title={title} subtitle={subtitle}>
+    <Layout title={texts.title} subtitle={texts.subtitle}>
       <div className="mx-auto overflow-hidden rounded-lg shadow-lg lg:flex lg:max-w-fit">
         <form
           className="space-y-4 bg-white px-6 py-8 lg:space-y-6 lg:p-12"
@@ -277,7 +275,7 @@ export function Information() {
             </div>
           </div>
 
-          <div className="flex justify-between">
+          <div className="flex justify-between space-x-4 sm:w-[18.75rem] sm:space-x-0">
             <Link to={paths.home} className="btn btn-ghost">
               Cancelar
             </Link>
