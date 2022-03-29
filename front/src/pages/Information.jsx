@@ -127,6 +127,7 @@ export function Information() {
         signature: signature,
         loans,
         course,
+        customer: data,
       },
     });
   }
@@ -211,7 +212,7 @@ export function Information() {
             <div className="flex items-center space-x-4">
               <label
                 className={
-                  'flex grow ' +
+                  'clickable flex grow select-none hover:bg-gray-100 ' +
                   (!fetching ? 'cursor-pointer' : 'cursor-not-allowed')
                 }
               >
@@ -233,7 +234,7 @@ export function Information() {
 
               <label
                 className={
-                  'flex grow ' +
+                  'clickable flex grow select-none hover:bg-gray-100 ' +
                   (!fetching ? 'cursor-pointer' : 'cursor-not-allowed')
                 }
               >
@@ -254,7 +255,7 @@ export function Information() {
 
               <label
                 className={
-                  'flex grow ' +
+                  'clickable flex grow select-none hover:bg-gray-100 ' +
                   (!fetching ? 'cursor-pointer' : 'cursor-not-allowed')
                 }
               >

@@ -21,7 +21,7 @@ export const Payment = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { signature, paymentMethods, selectedLoanNumber, course } =
+  const { signature, paymentMethods, selectedLoanNumber, course, customer } =
     location.state ?? {};
 
   const initialErrorsState = Object.freeze({
@@ -39,7 +39,8 @@ export const Payment = () => {
       !paymentMethods.length ||
       !signature ||
       !course ||
-      !selectedLoanNumber
+      !selectedLoanNumber ||
+      !customer
     ) {
       navigate(paths.home);
       return;
@@ -47,7 +48,8 @@ export const Payment = () => {
 
     setTexts((state) => ({
       ...state,
-      title: 'Método de pagamento',
+      title: `${course.name}`,
+      subtitle: 'Escolha o método de pagamento para o valor de entrada.',
     }));
     setComponentIsReady(true);
     setFetching(false);
@@ -115,6 +117,7 @@ export const Payment = () => {
             expirationDate,
             cvv,
           },
+          customer,
         },
       });
     }
@@ -150,7 +153,7 @@ export const Payment = () => {
         <div className="mx-auto overflow-hidden rounded-lg shadow-lg lg:flex lg:max-w-fit">
           <div className="space-y-4 bg-white px-6 py-8 lg:space-y-6 lg:p-12">
             <h2 className="text-2xl font-extrabold text-gray-900 sm:text-3xl">
-              Payment
+              Dados do cartão
             </h2>
 
             <label className="flex flex-col">
