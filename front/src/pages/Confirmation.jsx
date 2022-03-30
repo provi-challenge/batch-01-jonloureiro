@@ -77,7 +77,14 @@ export function Confirmation() {
         },
       });
     }
-    console.log(await responsePostLoans.json());
+    const { data } = await responsePostLoans.json();
+    navigate(paths.success, {
+      state: {
+        course: data.course,
+        customer: data.customer,
+        loan: data.loan,
+      },
+    });
   }
 
   if (!componentIsReady) return <Layout />;
