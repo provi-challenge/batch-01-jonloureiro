@@ -1,12 +1,12 @@
 const paths = Object.freeze({
   home: '/',
-  step1: '/step1',
-  step2: '/step2',
-  step3: '/step3',
-  step4: '/step4',
+  step1: '/basic-information',
+  step2: '/choose-financing',
+  step3: '/payment-method',
+  step4: '/confirmation',
 });
 
-const apiURI = 'http://localhost:5001';
+const apiURI = process.env.REACT_APP_API_URI ?? 'http://localhost:5001';
 
 const textsDefault = Object.freeze({
   title: 'Compre o seu curso profissionalizante',

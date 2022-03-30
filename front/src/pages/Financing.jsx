@@ -15,14 +15,14 @@ export function Financing() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { course, loans, signature } = location.state ?? {};
+  const { course, loans, signature, customer } = location.state ?? {};
 
   useEffect(() => {
     getPaymentMethods();
   }, []);
 
   useEffect(() => {
-    if (!loans || !loans.length || !signature || !course) {
+    if (!loans || !loans.length || !signature || !course || !customer) {
       navigate(paths.home);
       return;
     }
@@ -63,11 +63,12 @@ export function Financing() {
         signature: signature,
         paymentMethods,
         selectedLoanNumber: loan.number,
+        customer,
       },
     });
   }
 
-  if (!componentIsReady) return <h1>Aguarde</h1>;
+  if (!componentIsReady) return <Layout />;
 
   return (
     <Layout title={texts.title} subtitle={texts.subtitle}>

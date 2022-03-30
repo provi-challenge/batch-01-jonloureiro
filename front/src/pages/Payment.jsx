@@ -6,6 +6,7 @@ import {
   isValidCardExpirationDate,
   isValidCardNumber,
   isValidCvv,
+  isValidId,
   isValidName,
 } from '../utils';
 import { config } from '../config';
@@ -21,12 +22,12 @@ export const Payment = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { signature, paymentMethods, selectedLoanNumber, course } =
+  const { signature, paymentMethods, selectedLoanNumber, course, customer } =
     location.state ?? {};
 
   const initialErrorsState = Object.freeze({
     cardNumber: false,
-    cardName: false,
+    cardHolderName: false,
     expirationDate: false,
     cvv: false,
   });
@@ -39,7 +40,8 @@ export const Payment = () => {
       !paymentMethods.length ||
       !signature ||
       !course ||
-      !selectedLoanNumber
+      !selectedLoanNumber ||
+      !customer
     ) {
       navigate(paths.home);
       return;
@@ -47,7 +49,8 @@ export const Payment = () => {
 
     setTexts((state) => ({
       ...state,
-      title: 'Método de pagamento',
+      title: `${course.name}`,
+      subtitle: 'Escolha o método de pagamento para o valor de entrada.',
     }));
     setComponentIsReady(true);
     setFetching(false);
@@ -62,20 +65,19 @@ export const Payment = () => {
 
     const {
       elements: {
-        method: { value: method },
+        methodId: { value: methodId },
         cardNumber: { value: cardNumber },
-        cardName: { value: cardName },
+        cardHolderName: { value: cardHolderName },
         expirationDate: { value: expirationDate },
         cvv: { value: cvv },
       },
     } = e.currentTarget;
 
-    console.log(method);
-
     const currentErrors = {};
 
+    if (!isValidId(methodId)) currentErrors.methodId = true;
     if (!isValidCardNumber(cardNumber)) currentErrors.cardNumber = true;
-    if (!isValidName(cardName)) currentErrors.cardName = true;
+    if (!isValidName(cardHolderName)) currentErrors.cardHolderName = true;
     if (!isValidCardExpirationDate(expirationDate))
       currentErrors.expirationDate = true;
     if (!isValidCvv(cvv)) currentErrors.cvv = true;
@@ -95,13 +97,16 @@ export const Payment = () => {
     if (handleFormValidation(e)) {
       const {
         elements: {
-          method: { value: method },
+          methodId: { value: methodIdString },
           cardNumber: { value: cardNumber },
-          cardName: { value: cardName },
+          cardHolderName: { value: cardHolderName },
           expirationDate: { value: expirationDate },
           cvv: { value: cvv },
         },
       } = e.currentTarget;
+
+      const methodId = +methodIdString;
+      const { method } = paymentMethods[methodId - 1];
 
       return navigate(paths.step4, {
         state: {
@@ -110,36 +115,38 @@ export const Payment = () => {
           course,
           payment: {
             method,
+            methodId,
             cardNumber,
-            cardName,
+            cardHolderName,
             expirationDate,
             cvv,
           },
+          customer,
         },
       });
     }
     setFetching(false);
   }
 
-  if (!componentIsReady) return <h1>Aguarde</h1>;
+  if (!componentIsReady) return <Layout />;
 
   return (
     <Layout title={texts.title} subtitle={texts.subtitle}>
       <form className="flex flex-col" onSubmit={handleSubmit}>
         <div className="mx-auto -mt-4 mb-4 flex h-7 items-stretch overflow-hidden rounded-full bg-gray-50 text-gray-500 shadow lg:-mt-6 lg:mb-6">
-          {paymentMethods.map(({ method }, i) => (
-            <div key={method} className="flex">
+          {paymentMethods.map(({ method, id }, i) => (
+            <div key={id} className="flex">
               <input
-                id={method}
+                id={id}
                 type="radio"
-                name="method"
-                value={method}
+                name="methodId"
+                value={id}
                 className="peer hidden"
                 defaultChecked={i === 0}
               />
               <label
                 className="flex select-none items-center px-4 text-xs font-bold transition-colors duration-300 peer-checked:bg-gray-800 peer-checked:text-gray-200"
-                htmlFor={method}
+                htmlFor={id}
               >
                 {method.split('_')[0].toUpperCase()}
               </label>
@@ -150,7 +157,7 @@ export const Payment = () => {
         <div className="mx-auto overflow-hidden rounded-lg shadow-lg lg:flex lg:max-w-fit">
           <div className="space-y-4 bg-white px-6 py-8 lg:space-y-6 lg:p-12">
             <h2 className="text-2xl font-extrabold text-gray-900 sm:text-3xl">
-              Payment
+              Dados do cartão
             </h2>
 
             <label className="flex flex-col">
@@ -175,7 +182,7 @@ export const Payment = () => {
             <label className="flex flex-col">
               <span className="mb-1 text-gray-500">
                 Nome escrito no cartão
-                {errors.cardName && (
+                {errors.cardHolderName && (
                   <em className="text-error ml-1 text-xs font-bold not-italic">
                     (inválido)
                   </em>
@@ -185,7 +192,7 @@ export const Payment = () => {
                 required
                 className="input input-primary"
                 type="text"
-                name="cardName"
+                name="cardHolderName"
                 placeholder="Qual o nome escrito no cartão?"
                 disabled={fetching}
               />
@@ -230,7 +237,7 @@ export const Payment = () => {
               </label>
             </div>
 
-            <div className="flex justify-between space-x-4 sm:w-[18.75rem] sm:space-x-0">
+            <div className="flex justify-between space-x-4 sm:w-80 sm:space-x-0">
               <Link to={paths.home} className="btn btn-ghost">
                 Cancelar
               </Link>

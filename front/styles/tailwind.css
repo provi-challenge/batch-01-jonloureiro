@@ -2,13 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  @apply overflow-y-scroll;
+  @apply tracking-tight;
+}
+
+html,
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
 @layer components {
   .input {
     @apply bg-base-200 border-0 shadow-sm hover:shadow;
   }
 
   .btn {
-    @apply btn-primary h-[50px] border-0 bg-gray-800 px-5 text-base text-white shadow will-change-transform hover:bg-gray-900;
+    @apply btn-primary h-[50px] border-0 bg-gray-800 px-5 text-base font-medium text-white shadow will-change-transform hover:bg-gray-900;
   }
 
   .btn-36 {

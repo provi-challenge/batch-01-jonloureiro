@@ -127,6 +127,7 @@ export function Information() {
         signature: signature,
         loans,
         course,
+        customer: data,
       },
     });
   }
@@ -211,7 +212,7 @@ export function Information() {
             <div className="flex items-center space-x-4">
               <label
                 className={
-                  'flex grow ' +
+                  'clickable flex grow select-none hover:bg-gray-100 ' +
                   (!fetching ? 'cursor-pointer' : 'cursor-not-allowed')
                 }
               >
@@ -224,7 +225,7 @@ export function Information() {
                   disabled={fetching}
                 />
                 <span className="peer-checked:border-neutral w-full rounded-md border-2 py-2 text-center text-base font-bold text-gray-600 peer-checked:text-gray-800">
-                  <span className="mr-0.5 text-xs not-italic text-gray-500">
+                  <span className="mr-0.5 text-xs font-medium text-gray-500">
                     R$
                   </span>
                   {course && formatMoney((course.price / 100) * 0.1)}
@@ -233,7 +234,7 @@ export function Information() {
 
               <label
                 className={
-                  'flex grow ' +
+                  'clickable flex grow select-none hover:bg-gray-100 ' +
                   (!fetching ? 'cursor-pointer' : 'cursor-not-allowed')
                 }
               >
@@ -245,7 +246,7 @@ export function Information() {
                   disabled={fetching}
                 />
                 <span className="peer-checked:border-neutral w-full rounded-md border-2 py-2 text-center text-base font-bold text-gray-600 peer-checked:text-gray-800">
-                  <span className="mr-0.5 text-xs not-italic text-gray-500">
+                  <span className="mr-0.5 text-xs font-medium text-gray-500">
                     R$
                   </span>
                   {course && formatMoney((course.price / 100) * 0.2)}
@@ -254,7 +255,7 @@ export function Information() {
 
               <label
                 className={
-                  'flex grow ' +
+                  'clickable flex grow select-none hover:bg-gray-100 ' +
                   (!fetching ? 'cursor-pointer' : 'cursor-not-allowed')
                 }
               >
@@ -266,7 +267,7 @@ export function Information() {
                   disabled={fetching}
                 />
                 <span className="peer-checked:border-neutral w-full rounded-md border-2 py-2 text-center text-base font-bold text-gray-600 peer-checked:text-gray-800">
-                  <span className="mr-0.5 text-xs not-italic text-gray-500">
+                  <span className="mr-0.5 text-xs font-medium text-gray-500">
                     R$
                   </span>
                   {course && formatMoney((course.price / 100) * 0.3)}
@@ -275,7 +276,7 @@ export function Information() {
             </div>
           </div>
 
-          <div className="flex justify-between space-x-4 sm:w-[18.75rem] sm:space-x-0">
+          <div className="flex justify-between space-x-4 sm:w-80 sm:space-x-0">
             <Link to={paths.home} className="btn btn-ghost">
               Cancelar
             </Link>
