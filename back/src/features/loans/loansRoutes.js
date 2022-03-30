@@ -17,6 +17,18 @@ const POSSIBLE_ENTRY_VALUES = [0.1, 0.2, 0.3];
 export const loansRoutes = (() => {
   const router = Router();
 
+  router.get('/loans', async (req, res) => sendData(res, await Loans.get()));
+
+  router.get('/loans/:id', async (req, res) => {
+    const { params } = req;
+
+    if (Number.isNaN(+params.id)) {
+      return sendError(res, { status: 'Bad Request' }, 400);
+    }
+
+    return sendData(res, await Loans.get(params.id));
+  });
+
   router.post('/loans', async (req, res) => {
     const { body } = req;
 
@@ -92,9 +104,6 @@ export const loansRoutes = (() => {
       );
       return;
     }
-
-    // TODO: Salver loan no banco de dados
-    console.log(loanData);
 
     const loanSaved = await Loans.post(loanData);
 
