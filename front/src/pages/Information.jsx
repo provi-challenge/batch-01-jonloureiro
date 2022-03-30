@@ -51,7 +51,7 @@ export function Information() {
     if (!e.currentTarget) {
       console.error('Erro no formulário');
       console.error(e);
-      return;
+      return null;
     }
 
     const {
@@ -71,7 +71,7 @@ export function Information() {
 
     if (Object.keys(currentErrors).length) {
       setErros((state) => ({ ...state, ...currentErrors }));
-      return;
+      return null;
     }
 
     const body = JSON.stringify({
@@ -103,7 +103,7 @@ export function Information() {
           break;
       }
       setErros((state) => ({ ...state, ...currentErrors }));
-      return;
+      return null;
     }
 
     const { data } = await responsePostCustomers.json();
@@ -117,19 +117,17 @@ export function Information() {
     if (!responseGetLoans.ok) {
       currentErrors.api = true;
       setErros((state) => ({ ...state, ...currentErrors }));
-      return;
+      return null;
     }
 
     const { signature, data: loans } = await responseGetLoans.json();
 
-    navigate(paths.step2, {
-      state: {
-        signature: signature,
-        loans,
-        course,
-        customer: data,
-      },
-    });
+    return {
+      signature: signature,
+      loans,
+      course,
+      customer: data,
+    };
   }
 
   return (
@@ -140,8 +138,14 @@ export function Information() {
           onSubmit={async (e) => {
             setFetching(true);
             setErros(initialErrorsState);
-            await handleSubmit(e);
-            setFetching(false);
+            const state = await handleSubmit(e);
+            if (!state) {
+              setFetching(false);
+              return;
+            }
+            navigate(paths.step2, {
+              state,
+            });
           }}
         >
           <h3 className="text-2xl font-extrabold text-gray-900 sm:text-3xl">
