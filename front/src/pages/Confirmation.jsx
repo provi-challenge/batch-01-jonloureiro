@@ -5,7 +5,7 @@ import { formatMoney } from '../utils';
 import { config } from '../config';
 import { Layout } from './__Layout';
 
-const { paths, textsDefault } = config;
+const { paths, textsDefault, apiURI } = config;
 
 export function Confirmation() {
   const [componentIsReady, setComponentIsReady] = useState(false);
@@ -48,12 +48,40 @@ export function Confirmation() {
     setLoan(selectedLoan);
   }
 
+  async function handleClick() {
+    const responsePostLoans = await fetch(`${apiURI}/loans`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        customer_id: customer.id,
+        course_id: course.id,
+        payment: {
+          card_holder_name: payment.cardHolderName,
+          card_number: payment.cardNumber,
+          card_cvv: payment.cvv,
+          card_expiration_date: payment.expirationDate,
+          payment_method_id: payment.methodId,
+        },
+        loan_number: selectedLoanNumber,
+        signature,
+      }),
+    });
+
+    if (responsePostLoans.ok) {
+      console.log(await responsePostLoans.json());
+    }
+  }
+
   if (!componentIsReady) return <Layout />;
 
   return (
     <Layout title={texts.title} subtitle={texts.subtitle}>
       <div className="link -mt-4 mb-6 flex justify-center font-medium sm:-mt-7">
-        <Link to={paths.home}>Voltar para página do curso</Link>
+        <Link className="clickable" to={paths.home}>
+          Voltar para página do curso
+        </Link>
       </div>
       <div className="mx-auto max-w-lg overflow-hidden rounded-lg shadow-lg lg:flex lg:max-w-none">
         <div className="grow space-y-4 bg-white py-8 px-6 lg:flex lg:flex-shrink-0 lg:justify-around lg:space-y-0 lg:space-x-6 lg:p-12">
@@ -154,7 +182,9 @@ export function Confirmation() {
               </div>
             </span>
           </div>
-          <button className="btn btn-block mt-3">Confirmar</button>
+          <button className="btn btn-block mt-3" onClick={handleClick}>
+            Confirmar
+          </button>
           <p className="mt-3 px-6 text-xs tracking-tight">
             Ao confirmar você concorda com os termos de uso. O pagamento da
             entrada será efetuado. E o financiamento será processado em até 72h.
