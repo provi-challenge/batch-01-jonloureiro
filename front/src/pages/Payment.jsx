@@ -6,6 +6,7 @@ import {
   isValidCardExpirationDate,
   isValidCardNumber,
   isValidCvv,
+  isValidId,
   isValidName,
 } from '../utils';
 import { config } from '../config';
@@ -64,7 +65,7 @@ export const Payment = () => {
 
     const {
       elements: {
-        method: { value: method },
+        methodId: { value: methodId },
         cardNumber: { value: cardNumber },
         cardHolderName: { value: cardHolderName },
         expirationDate: { value: expirationDate },
@@ -72,10 +73,9 @@ export const Payment = () => {
       },
     } = e.currentTarget;
 
-    console.log(method);
-
     const currentErrors = {};
 
+    if (!isValidId(methodId)) currentErrors.methodId = true;
     if (!isValidCardNumber(cardNumber)) currentErrors.cardNumber = true;
     if (!isValidName(cardHolderName)) currentErrors.cardHolderName = true;
     if (!isValidCardExpirationDate(expirationDate))
@@ -97,13 +97,15 @@ export const Payment = () => {
     if (handleFormValidation(e)) {
       const {
         elements: {
-          method: { value: method },
+          methodId: { value: methodId },
           cardNumber: { value: cardNumber },
           cardHolderName: { value: cardHolderName },
           expirationDate: { value: expirationDate },
           cvv: { value: cvv },
         },
       } = e.currentTarget;
+
+      const { method } = paymentMethods[methodId];
 
       return navigate(paths.step4, {
         state: {
@@ -112,6 +114,7 @@ export const Payment = () => {
           course,
           payment: {
             method,
+            methodId,
             cardNumber,
             cardHolderName,
             expirationDate,
@@ -130,19 +133,19 @@ export const Payment = () => {
     <Layout title={texts.title} subtitle={texts.subtitle}>
       <form className="flex flex-col" onSubmit={handleSubmit}>
         <div className="mx-auto -mt-4 mb-4 flex h-7 items-stretch overflow-hidden rounded-full bg-gray-50 text-gray-500 shadow lg:-mt-6 lg:mb-6">
-          {paymentMethods.map(({ method }, i) => (
-            <div key={method} className="flex">
+          {paymentMethods.map(({ method, id }, i) => (
+            <div key={id} className="flex">
               <input
-                id={method}
+                id={id}
                 type="radio"
-                name="method"
-                value={method}
+                name="methodId"
+                value={id}
                 className="peer hidden"
                 defaultChecked={i === 0}
               />
               <label
                 className="flex select-none items-center px-4 text-xs font-bold transition-colors duration-300 peer-checked:bg-gray-800 peer-checked:text-gray-200"
-                htmlFor={method}
+                htmlFor={id}
               >
                 {method.split('_')[0].toUpperCase()}
               </label>
