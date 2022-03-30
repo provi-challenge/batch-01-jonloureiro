@@ -1,27 +1,18 @@
 import Router from 'express-promise-router';
-import { Courses } from './Courses.js';
+
+import { coursesRoutes } from './features/courses/coursesRoutes.js';
+import { customersRoutes } from './features/customers/customersRoutes.js';
+import { loansRoutes } from './features/loans/loansRoutes.js';
+import { paymentMethodsRoutes } from './features/paymentMethods/paymentMethodsRoutes.js';
+import { sendOk } from './utils/sendOk.js';
 
 const router = Router();
 
-const sendOk = (res, options) =>
-  res.json({
-    error: false,
-    status: 'OK',
-    ...options,
-  });
-
-const sendData = (res, data) => sendOk(res, { data });
-
 export const setupRoutes = app => {
+  router.get('/', async (req, res) => sendOk(res));
   app.use(router);
-  router.get('/', async (req, res) => {
-    return res.json({ error: false, status: 'OK' });
-  });
-  router.get('/courses', async (req, res) => {
-    return sendData(res, await Courses.get());
-  });
-  router.get('/courses/:id', async (req, res) => {
-    const { params } = req;
-    return sendData(res, await Courses.get(params.id));
-  });
+  app.use(coursesRoutes);
+  app.use(customersRoutes);
+  app.use(loansRoutes);
+  app.use(paymentMethodsRoutes);
 };

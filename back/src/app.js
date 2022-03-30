@@ -1,7 +1,10 @@
+import 'dotenv/config';
+
 import cors from 'cors';
 import express from 'express';
 import http from 'http';
 import throng from 'throng';
+
 import { setupRoutes } from './setupRoutes.js';
 
 const { NODE_ENV, PORT, WEB_CONCURRENCY } = process.env;
@@ -31,5 +34,5 @@ const worker = (id, disconnect) => {
 };
 
 throng({ worker, count: WORKERS }).catch(e =>
-  console.error(`Error starting "back"`, e)
+  console.error('Error starting "back"', e)
 );
