@@ -3,10 +3,12 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import {
   Confirmation,
+  Error,
   Financing,
   Information,
   Payment,
   Pricing,
+  Success,
 } from './pages';
 import { config } from './config';
 
@@ -21,6 +23,12 @@ function App() {
         <Route path={paths.step2} element={<Financing />}></Route>
         <Route path={paths.step3} element={<Payment />}></Route>
         <Route path={paths.step4} element={<Confirmation />}></Route>
+        <Route path={paths.success} element={<Success />}></Route>
+        <Route path={paths.error} element={<Error />}></Route>
+        <Route
+          path="*"
+          element={<Error title="Ops..." subtitle="Nada por aqui" />}
+        ></Route>
       </Routes>
     </BrowserRouter>
   );

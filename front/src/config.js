@@ -4,6 +4,8 @@ const paths = Object.freeze({
   step2: '/choose-financing',
   step3: '/payment-method',
   step4: '/confirmation',
+  error: '/error',
+  success: '/success',
 });
 
 const apiURI = process.env.REACT_APP_API_URI ?? 'http://localhost:5001';
