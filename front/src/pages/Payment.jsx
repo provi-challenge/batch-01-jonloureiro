@@ -106,7 +106,7 @@ export const Payment = () => {
       } = e.currentTarget;
 
       const methodId = +methodIdString;
-      const { method } = paymentMethods[methodId];
+      const { method } = paymentMethods[methodId - 1];
 
       return navigate(paths.step4, {
         state: {
