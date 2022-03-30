@@ -97,7 +97,7 @@ export const Payment = () => {
     if (handleFormValidation(e)) {
       const {
         elements: {
-          methodId: { value: methodId },
+          methodId: { value: methodIdString },
           cardNumber: { value: cardNumber },
           cardHolderName: { value: cardHolderName },
           expirationDate: { value: expirationDate },
@@ -105,6 +105,7 @@ export const Payment = () => {
         },
       } = e.currentTarget;
 
+      const methodId = +methodIdString;
       const { method } = paymentMethods[methodId];
 
       return navigate(paths.step4, {
