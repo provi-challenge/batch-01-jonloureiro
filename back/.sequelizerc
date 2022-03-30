@@ -1,8 +1,6 @@
 const path = require('path');
 
 module.exports = {
-  url:
-    process.env.DATABASE_URL ??
-    'postgres://postgres:postgres@localhost:5444/postgres',
+  config: path.resolve('db', 'config.cjs'),
   'migrations-path': path.resolve('db', 'migrations'),
 };
