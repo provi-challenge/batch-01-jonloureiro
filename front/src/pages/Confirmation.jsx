@@ -69,9 +69,15 @@ export function Confirmation() {
       }),
     });
 
-    if (responsePostLoans.ok) {
-      console.log(await responsePostLoans.json());
+    if (!responsePostLoans.ok) {
+      return navigate(paths.error, {
+        state: {
+          title: 'Erro ao realizar pagamento',
+          subtitle: 'Por favor, tente novamente mais tarde.',
+        },
+      });
     }
+    console.log(await responsePostLoans.json());
   }
 
   if (!componentIsReady) return <Layout />;
@@ -165,7 +171,7 @@ export function Confirmation() {
             </span>
             ;
           </p>
-          <div className="flex flex-col text-xl tracking-widest">
+          <div className="mt-2 flex flex-col text-xl tracking-wider">
             Por apenas:
             <br />
             <span className="flex justify-center">
@@ -176,7 +182,7 @@ export function Confirmation() {
                 {formatMoney(
                   (+loan.installmentValue - loan.installmentDiscount) / 100
                 )}
-                <span className="absolute bottom-0.5 -right-12 text-sm text-gray-500">
+                <span className="absolute bottom-0.5 -right-14 text-sm text-gray-500">
                   em {loan.installment}x
                 </span>
               </div>
