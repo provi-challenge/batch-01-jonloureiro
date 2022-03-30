@@ -8,6 +8,7 @@ import { generateOffers } from './helpers/generateOffer.js';
 import { toSign } from '../../utils/signAndVerify.js';
 import { createLoan } from './helpers/createLoan.js';
 import { PaymentMethods } from '../paymentMethods/PaymentMethods.js';
+import { Loans } from './Loans.js';
 
 const CUSTOMER_ID = 'customerId';
 const COURSES_ID = 'coursesId';
@@ -44,18 +45,19 @@ export const loansRoutes = (() => {
       return;
     }
 
-    const [paymentMethod, course] = await Promise.all([
+    const [paymentMethod, course, customer] = await Promise.all([
       PaymentMethods.get(loan.payment.payment_method_id),
-      Courses.get(loan.customer_id),
+      Courses.get(loan.course_id),
+      Customers.get(loan.customer_id),
     ]);
 
     const loanData = {
-      course_id: loan.course_id,
-      customer_id: loan.customer_id,
-      entry: offer.entry,
-      course_price: +course.price,
+      courseId: loan.course_id,
+      customerId: loan.customer_id,
+      entryInPercentage: parseInt(+offer.entry * 100, 10),
+      coursePriceOnLoanDate: +course.price,
       installment: offer.installment,
-      installment_value: parseInt(
+      installmentValue: parseInt(
         offer.installmentValue - offer.installmentDiscount,
         10
       ),
@@ -75,7 +77,7 @@ export const loansRoutes = (() => {
     const simulateTheTimeOfARequest = () =>
       new Promise(resolve => {
         setTimeout(() => {
-          console.log(simulateBody);
+          console.log(simulateBody); // eslint-disable-line no-console
           resolve({ ok: true });
         }, 1000);
       });
@@ -93,7 +95,15 @@ export const loansRoutes = (() => {
 
     // TODO: Salver loan no banco de dados
     console.log(loanData);
-    sendData(res, loan);
+
+    const loanSaved = await Loans.post(loanData);
+
+    const data = {
+      course,
+      loan: loanSaved,
+      customer,
+    };
+    sendData(res, data);
   });
 
   router.get(
