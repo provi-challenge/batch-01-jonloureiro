@@ -26,7 +26,7 @@ export const Payment = () => {
 
   const initialErrorsState = Object.freeze({
     cardNumber: false,
-    cardName: false,
+    cardHolderName: false,
     expirationDate: false,
     cvv: false,
   });
@@ -66,7 +66,7 @@ export const Payment = () => {
       elements: {
         method: { value: method },
         cardNumber: { value: cardNumber },
-        cardName: { value: cardName },
+        cardHolderName: { value: cardHolderName },
         expirationDate: { value: expirationDate },
         cvv: { value: cvv },
       },
@@ -77,7 +77,7 @@ export const Payment = () => {
     const currentErrors = {};
 
     if (!isValidCardNumber(cardNumber)) currentErrors.cardNumber = true;
-    if (!isValidName(cardName)) currentErrors.cardName = true;
+    if (!isValidName(cardHolderName)) currentErrors.cardHolderName = true;
     if (!isValidCardExpirationDate(expirationDate))
       currentErrors.expirationDate = true;
     if (!isValidCvv(cvv)) currentErrors.cvv = true;
@@ -99,7 +99,7 @@ export const Payment = () => {
         elements: {
           method: { value: method },
           cardNumber: { value: cardNumber },
-          cardName: { value: cardName },
+          cardHolderName: { value: cardHolderName },
           expirationDate: { value: expirationDate },
           cvv: { value: cvv },
         },
@@ -113,7 +113,7 @@ export const Payment = () => {
           payment: {
             method,
             cardNumber,
-            cardName,
+            cardHolderName,
             expirationDate,
             cvv,
           },
@@ -124,7 +124,7 @@ export const Payment = () => {
     setFetching(false);
   }
 
-  if (!componentIsReady) return <h1>Aguarde</h1>;
+  if (!componentIsReady) return <Layout />;
 
   return (
     <Layout title={texts.title} subtitle={texts.subtitle}>
@@ -178,7 +178,7 @@ export const Payment = () => {
             <label className="flex flex-col">
               <span className="mb-1 text-gray-500">
                 Nome escrito no cartão
-                {errors.cardName && (
+                {errors.cardHolderName && (
                   <em className="text-error ml-1 text-xs font-bold not-italic">
                     (inválido)
                   </em>
@@ -188,7 +188,7 @@ export const Payment = () => {
                 required
                 className="input input-primary"
                 type="text"
-                name="cardName"
+                name="cardHolderName"
                 placeholder="Qual o nome escrito no cartão?"
                 disabled={fetching}
               />
@@ -233,7 +233,7 @@ export const Payment = () => {
               </label>
             </div>
 
-            <div className="flex justify-between space-x-4 sm:w-[18.75rem] sm:space-x-0">
+            <div className="flex justify-between space-x-4 sm:w-80 sm:space-x-0">
               <Link to={paths.home} className="btn btn-ghost">
                 Cancelar
               </Link>

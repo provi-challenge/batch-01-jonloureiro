@@ -68,7 +68,7 @@ export function Financing() {
     });
   }
 
-  if (!componentIsReady) return <h1>Aguarde</h1>;
+  if (!componentIsReady) return <Layout />;
 
   return (
     <Layout title={texts.title} subtitle={texts.subtitle}>
