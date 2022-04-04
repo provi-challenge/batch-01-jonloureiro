@@ -201,7 +201,7 @@ export function Confirmation() {
             </span>
           </div>
           <button
-            className="btn btn-block mt-3"
+            className={'btn btn-block mt-3' + (disableButton ? ' loading' : '')}
             onClick={handleClick}
             disabled={disableButton}
           >
