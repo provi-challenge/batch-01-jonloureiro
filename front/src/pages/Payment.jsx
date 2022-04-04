@@ -195,6 +195,7 @@ export const Payment = () => {
                 name="cardHolderName"
                 placeholder="Qual o nome escrito no cartão?"
                 disabled={fetching}
+                maxLength={30}
               />
             </label>
 
