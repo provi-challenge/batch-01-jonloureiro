@@ -1,6 +1,7 @@
 export { fetcher } from './fetcher';
 export { formatCPF } from './formatCPF';
 export { formatMoney } from './formatMoney';
+export { formatPaymentMethod } from './formatPaymentMethod';
 export { isValidCardExpirationDate } from './isValidCardExpirationDate';
 export { isValidCardNumber } from './isValidCardNumber';
 export { isValidCPF } from './isValidCPF';
