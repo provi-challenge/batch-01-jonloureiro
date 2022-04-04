@@ -61,6 +61,32 @@ function validSut(t, sut, numberOffers = 3) {
       t.is(actual, 'number', `${key} deve ser um número`);
     });
   });
+
+  sut.forEach(offer => {
+    const {
+      totalValue,
+      installment,
+      installmentValue,
+      totalDiscount,
+      installmentDiscount,
+      finalValue,
+    } = offer;
+    t.is(
+      totalValue,
+      +(installmentValue * installment).toFixed(2),
+      'O valor total deve ser o valor da parcela vezes o número de parcelas'
+    );
+    t.is(
+      totalDiscount,
+      installmentDiscount * installment,
+      'O desconto total deve ser o desconto da parcela vezes o número de parcelas'
+    );
+    t.is(
+      finalValue,
+      +(totalValue - totalDiscount).toFixed(2),
+      'O valor final deve ser o total menos o desconto total'
+    );
+  });
 }
 
 test('Chamando com parâmetros corretos', t => {

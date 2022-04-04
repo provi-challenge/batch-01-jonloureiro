@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import { formatMoney } from '../utils';
+import { formatMoney, formatPaymentMethod } from '../utils';
 import { config } from '../config';
 import { Layout } from './__Layout';
 
@@ -11,6 +11,7 @@ export function Confirmation() {
   const [componentIsReady, setComponentIsReady] = useState(false);
   const [texts, setTexts] = useState(textsDefault);
   const [loan, setLoan] = useState([]);
+  const [disableButton, setDisableButton] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ export function Confirmation() {
   }
 
   async function handleClick() {
+    setDisableButton(true);
     const responsePostLoans = await fetch(`${apiURI}/loans`, {
       method: 'POST',
       headers: {
@@ -70,6 +72,7 @@ export function Confirmation() {
     });
 
     if (!responsePostLoans.ok) {
+      setDisableButton(false);
       return navigate(paths.error, {
         state: {
           title: 'Erro ao realizar pagamento',
@@ -77,8 +80,10 @@ export function Confirmation() {
         },
       });
     }
+
     const { data } = await responsePostLoans.json();
-    navigate(paths.success, {
+
+    return navigate(paths.success, {
       state: {
         course: data.course,
         customer: data.customer,
@@ -133,7 +138,7 @@ export function Confirmation() {
               Método de pagamento:
               <br />
               <span className="text-lg font-bold text-gray-500">
-                {payment.method.split('_')[0].toUpperCase()}
+                {formatPaymentMethod(payment.method).toUpperCase()}
               </span>
             </p>
             <p className="my-4 font-medium text-gray-600 last:mb-0">
@@ -195,7 +200,11 @@ export function Confirmation() {
               </div>
             </span>
           </div>
-          <button className="btn btn-block mt-3" onClick={handleClick}>
+          <button
+            className={'btn btn-block mt-3' + (disableButton ? ' loading' : '')}
+            onClick={handleClick}
+            disabled={disableButton}
+          >
             Confirmar
           </button>
           <p className="mt-3 px-6 text-xs tracking-tight">

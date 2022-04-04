@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 const PUBLIC_KEY_BASE64 = process.env.PUBLIC_KEY;
 const PRIVATE_KEY_BASE64 = process.env.PRIVATE_KEY;
 

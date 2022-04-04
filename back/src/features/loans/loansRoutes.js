@@ -112,7 +112,7 @@ export const loansRoutes = (() => {
       loan: loanSaved,
       customer,
     };
-    sendData(res, data);
+    sendData(res, data, { status: 'Created' }, 201);
   });
 
   router.get(

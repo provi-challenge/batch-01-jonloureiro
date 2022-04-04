@@ -3,6 +3,7 @@ import { IMaskInput } from 'react-imask';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import {
+  formatPaymentMethod,
   isValidCardExpirationDate,
   isValidCardNumber,
   isValidCvv,
@@ -148,7 +149,7 @@ export const Payment = () => {
                 className="flex select-none items-center px-4 text-xs font-bold transition-colors duration-300 peer-checked:bg-gray-800 peer-checked:text-gray-200"
                 htmlFor={id}
               >
-                {method.split('_')[0].toUpperCase()}
+                {formatPaymentMethod(method).toUpperCase()}
               </label>
             </div>
           ))}
@@ -195,6 +196,7 @@ export const Payment = () => {
                 name="cardHolderName"
                 placeholder="Qual o nome escrito no cartão?"
                 disabled={fetching}
+                maxLength={30}
               />
             </label>
 
