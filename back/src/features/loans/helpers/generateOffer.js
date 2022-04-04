@@ -41,14 +41,26 @@ export const generateOffers = function(customerCpf, coursePrice, entry = 0.1) {
 
   luckyDigits.forEach((luckyDigit, i) => {
     const installment = NUMBER_OF_INSTALLMENTS[i];
-    const installmentValue =
+
+    const installmentValue = +(
       ((coursePrice * (1 - entry)) / installment) *
-      (1 + CUSTOM_LOAN_RATES[luckyDigit]);
+      (1 + CUSTOM_LOAN_RATES[luckyDigit])
+    ).toFixed(2);
+
     const discount = +(CUSTOM_LOAN_RATES[luckyDigit] / 3).toFixed(2);
-    const totalValue = installment * installmentValue;
-    const installmentDiscount = Math.round(discount * installmentValue);
-    const finalValue = (installmentValue - installmentDiscount) * installment;
-    const totalDiscount = totalValue - finalValue;
+
+    const totalValue = +(installment * installmentValue).toFixed(2);
+
+    const installmentDiscount = +Math.round(
+      discount * installmentValue
+    ).toFixed(2);
+
+    const finalValue = +(
+      (installmentValue - installmentDiscount) *
+      installment
+    ).toFixed(2);
+
+    const totalDiscount = +(totalValue - finalValue).toFixed(2);
 
     const offer = {
       number: i + 1,
