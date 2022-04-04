@@ -43,13 +43,13 @@ export function Success() {
     <Layout>
       <div className="mx-auto overflow-hidden rounded-lg shadow-lg lg:flex lg:max-w-fit">
         <div className="space-y-4 bg-white px-6 py-8 text-center lg:space-y-6 lg:p-12">
-          <h1 class="text-xl font-extrabold text-gray-900 lg:text-2xl">
+          <h1 className="text-xl font-extrabold text-gray-900 lg:text-2xl">
             Parabéns {customer.name}!
           </h1>
-          <p class="my-4 text-xl text-gray-600">
+          <p className="my-4 text-xl text-gray-600">
             Você acabou de adquirir o curso <b>{course.name}</b>.
           </p>
-          <p class="my-4 text-xl text-gray-600">
+          <p className="my-4 text-xl text-gray-600">
             Com o valor da entrada de apenas R${' '}
             <b>
               {formatMoney(
@@ -60,7 +60,7 @@ export function Success() {
             </b>
             .
           </p>
-          <p class="my-4 text-xl text-gray-600">
+          <p className="my-4 text-xl text-gray-600">
             E o restante em <b>{loan.installment}</b> parcelas de R$
             <b> {formatMoney(+loan.installment_value / 100)}</b>.
           </p>
