@@ -1,0 +1,8 @@
+; frontend
+
+- Inserir dados do cartão: quando coloca a mensagem de erro na validade, mexe o campo cvv
+
+; backend
+
+- Adicionar paginação
+- Adicionar captura de erro e responder com json
